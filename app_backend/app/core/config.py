@@ -10,7 +10,7 @@ class Settings(BaseSettings):
     POSTGRES_DB: str
     POSTGRES_PORT: str = "5432"
     
-    SQLALCHEMY_DATABASE_URI = PostgresDsn | None = None
+    SQLALCHEMY_DATABASE_URI = PostgresDsn | None 
     
     # Auth0 Configuration
     AUTH0_DOMAIN: str

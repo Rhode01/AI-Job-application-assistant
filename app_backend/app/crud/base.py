@@ -2,7 +2,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import Session
 from typing import Type, TypeVar, List, Optional
-from db.base import Base
+from app_backend.app.db.base import Base
 
 model = TypeVar("model", bound=Base)
 
