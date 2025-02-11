@@ -1,0 +1,1 @@
+"""implementing Auth0Service class to handle user management on auth0 platform"""
