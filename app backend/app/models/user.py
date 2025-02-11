@@ -1,12 +1,10 @@
-from sqlalchemy import Column, String, Boolean, DateTime, ForeignKey, func, Enum, JSON, Index
-from sqlalchemy.orm import relationship
-import enum
+from sqlalchemy import Column, String, Boolean, DateTime, func, JSON
 from app.db.base import Base
 
 
 class User(Base):
     __tablename__ = "users"
-    id = Column(String, primary_key=True)  # Auth0 user ID
+    id = Column(String, primary_key=True) 
     email = Column(String, unique=True, nullable=False, index=True)
     first_name = Column(String)
     last_name = Column(String)
