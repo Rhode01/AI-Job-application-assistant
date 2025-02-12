@@ -1,5 +1,5 @@
 from sqlalchemy import Column, String, Boolean, DateTime, func, JSON
-from app.db.base import Base
+from app_backend.app.db.base import Base
 
 
 class User(Base):
