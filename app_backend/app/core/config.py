@@ -30,7 +30,7 @@ class Settings(BaseSettings):
             password=values.data.get("POSTGRES_PASSWORD"),
             host=values.data.get("POSTGRES_HOST"),
             port=int(values.data.get("POSTGRES_PORT", 5432)),
-            path=f"/{values.data.get('POSTGRES_DB')}",  
+            path=values.data.get('POSTGRES_DB'),  
         )
 
 settings = Settings()
