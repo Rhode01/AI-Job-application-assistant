@@ -4,7 +4,9 @@ from app_backend.app.db.base import get_db
 from app_backend.app.crud.user import CRUDUser  
 from app_backend.app.models.user import User
 from app_backend.app.schemas.user import UserDetails
+from app_backend.app.schemas.cv_file import CVdocumentLoader
 from typing import List
+from app_backend.app.AI.main.main import CVParser
 
 router = APIRouter()
 
@@ -16,33 +18,10 @@ async def create_user( user_details: UserDetails, db: AsyncSession = Depends(get
     crud_user: CRUDUser = Depends(get_crud_user)):
     return await crud_user.create(db=db, obj_in=user_details)
 
+@router.post("/upload_cv" )
+async def upload_cv(path:CVdocumentLoader):
+    print(f" the file path is  {path.file}")
+    return await CVParser.upload_file(path) 
 
 
-# @router.get("/users/{user_id}", response_model=User)
-# async def get_user(user_id: str, db: AsyncSession = Depends(get_db)):
-#     user = await crud_user.get(db=db, id=user_id)
-#     if not user:
-#         raise HTTPException(status_code=404, detail="User not found")
-#     return user
-
-# @router.get("/users/", response_model=List[User])
-# async def get_users(db: AsyncSession = Depends(get_db)):
-#     users = await crud_user.get_all(db=db)
-#     return users
-
-
-# @router.put("/users/{user_id}", response_model=User)
-# async def update_user(user_id: str, user: User, db: AsyncSession = Depends(get_db)):
-#     updated_user = await crud_user.update(db=db, id=user_id, obj_in=user)
-#     if not updated_user:
-#         raise HTTPException(status_code=404, detail="User not found")
-#     return updated_user
-
-
-# @router.delete("/users/{user_id}", response_model=User)
-# async def delete_user(user_id: str, db: AsyncSession = Depends(get_db)):
-#     deleted_user = await crud_user.delete(db=db, id=user_id)
-#     if not deleted_user:
-#         raise HTTPException(status_code=404, detail="User not found")
-#     return deleted_user
 
