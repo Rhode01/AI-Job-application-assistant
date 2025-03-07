@@ -13,6 +13,8 @@ Below is the CV:
 
 The output should be in a Python dict format with the following keys:
 
+- "skills": A detailed analysis of the individual's skills that are straight forward as possible.
+-"qualifications": A detailed analysis of the individual's qualification that are straight forward as possible.
 - "Skills_and_experience_analysis": A detailed analysis of the individual's skills and experience, including strengths, potential growth areas, and relevant qualifications.
 - "job_opportunities": A list of **simple, clear job titles** that are relevant to the individual’s experience and align with job listings on myjobo 
 in Malawi. Each title should be easily searchable on the platform. Examples: "Software Engineer", "Data Analyst", "Nurse", "Project Coordinator", "Teacher", "Administrator", "Graphic Designer", "Sales Representative",

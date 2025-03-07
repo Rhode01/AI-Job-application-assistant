@@ -11,36 +11,32 @@ class CVParser:
         self.llm = openai_llm
         self.document = None
         self.llm_response = None
-
     async def load_document(self) -> Document:
         if not os.path.exists(self.file_path):
             raise FileNotFoundError(f"File not found: {self.file_path}")
 
-        documents = SimpleDirectoryReader(files=[self.file_path]).load_data()
+        documents = SimpleDirectoryReader(input_files=[self.file_path]).load_data()
         if not documents:
             raise ValueError(f"Failed to load document: {self.file_path}")
-
         self.document = documents[0]
         return self.document
 
     async def process_cv(self) -> Dict:
-        if not self.document:
-            self.load_document()
-
+        if self.document is None:
+            await self.load_document()
         prompt = ChatPromptTemplate.from_template(cv_template)
-        chain = LLMChain(prompt=prompt, llm=self.llm)
-
+        chain = LLMChain(prompt=prompt, llm= self.llm)
         try:
             self.llm_response = await chain.arun(  
-                {"input": self.document.text}
+                {"input": self.document.text_resource.text}
             )
             return self.llm_response
         except Exception as e:
             raise RuntimeError(f"LLM processing failed: {str(e)}")
-
-    async def initialize(self) -> None:
-        await self.process_cv()  
-
+        
+    async def initialize(self):
+        return await self.process_cv() 
+       
     async def get_processed_data(self) -> Dict:
         if not self.llm_response:
             raise ValueError("No processed data available. Run initialize() first.")

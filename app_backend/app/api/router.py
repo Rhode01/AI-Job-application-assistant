@@ -8,7 +8,6 @@ from app_backend.app.AI.app.core.config import ai_model
 from app_backend.app.AI.app.cv_analysis.cv_parser import CVParser
 import tempfile
 
-
 router = APIRouter()
 
 def get_crud_user():
@@ -24,14 +23,10 @@ async def upload_cv(file:UploadFile = File(...)):
     with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as temp_file:
         temp_path = temp_file.name
         temp_file.write(await file.read())
-    
     cv_parser = CVParser(temp_path, ai_model.model)
-    print("cv parser done")
     await cv_parser.initialize()
-    print("initializing done")
-    processed_data = await cv_parser.get_processed_data()
-    print(f"Proccessed data {processed_data}")
-    return 
+    llm_response = cv_parser.get_processed_data()
+    return llm_response
 @router.get("/")
 async def index():
     return {"info":"Home page"}
