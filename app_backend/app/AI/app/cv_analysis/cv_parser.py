@@ -1,4 +1,5 @@
 import os
+import json
 from llama_index.core import SimpleDirectoryReader, Document
 from langchain.prompts import ChatPromptTemplate
 from langchain.chains import LLMChain
@@ -25,11 +26,12 @@ class CVParser:
         if self.document is None:
             await self.load_document()
         prompt = ChatPromptTemplate.from_template(cv_template)
-        chain = LLMChain(prompt=prompt, llm= self.llm)
+        chain = prompt|self.llm  
         try:
-            self.llm_response = await chain.arun(  
+            response = await chain.ainvoke(
                 {"input": self.document.text_resource.text}
             )
+            self.llm_response = json.loads(response.content)
             return self.llm_response
         except Exception as e:
             raise RuntimeError(f"LLM processing failed: {str(e)}")

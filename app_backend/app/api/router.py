@@ -25,7 +25,7 @@ async def upload_cv(file:UploadFile = File(...)):
         temp_file.write(await file.read())
     cv_parser = CVParser(temp_path, ai_model.model)
     await cv_parser.initialize()
-    llm_response = cv_parser.get_processed_data()
+    llm_response = await cv_parser.get_processed_data()
     return llm_response
 @router.get("/")
 async def index():
