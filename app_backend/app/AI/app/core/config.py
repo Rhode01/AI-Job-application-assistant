@@ -5,6 +5,6 @@ class AImodel:
         self.init_model()  
 
     def init_model(self):
-        self.model = ChatOpenAI(temperature=0, model="gpt-4")
+        self.model = ChatOpenAI(model="o3-mini")
 
 ai_model = AImodel()
