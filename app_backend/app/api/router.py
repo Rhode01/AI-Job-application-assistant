@@ -7,7 +7,7 @@ from app_backend.app.schemas.user import UserDetails
 from app_backend.app.AI.app.core.config import ai_model
 from app_backend.app.AI.app.cv_analysis.cv_parser import CVParser
 import tempfile
-
+from app_backend.app.AI.app.job_parser.job_parser import JobParse
 router = APIRouter()
 
 def get_crud_user():
@@ -27,6 +27,12 @@ async def upload_cv(file:UploadFile = File(...)):
     await cv_parser.initialize()
     llm_response = await cv_parser.get_processed_data()
     return llm_response
+@router.post("/job_search")
+async def job_parser(job_title:str):
+    jobParser_obj = JobParse(job_title)
+    jobparser_results = await jobParser_obj.search_for_jobs()
+    
+    return jobparser_results
 @router.get("/")
 async def index():
     return {"info":"Home page"}
