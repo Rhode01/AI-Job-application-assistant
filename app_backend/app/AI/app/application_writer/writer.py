@@ -23,26 +23,20 @@ class ApplicationWriter:
         self.final_letter = None
 
     async def load_cv_content(self) -> None:
-        """Load and process CV content"""
         if not self.cv_path:
             raise ValueError("CV path is required")
-        
         parser = CVParser(self.cv_path, self.llm)
         try:
-            processed_data = await parser.initialize()
-            self.cv_content = processed_data  # Store parsed CV data
+            processed_data = await parser.load_document()
+            self.cv_content = processed_data.text_resource.text
         except Exception as e:
             logger.error(f"CV processing failed: {str(e)}")
             raise
-
     async def generate_initial_letter(self) -> str:
-        """Generate the first draft application letter"""
         if not self.cv_content:
             await self.load_cv_content()
-        
         prompt = ChatPromptTemplate.from_template(initial_letter_template)
         chain = prompt | self.llm
-        
         try:
             response = await chain.ainvoke({
                 "cv_content": json.dumps(self.cv_content),
@@ -55,13 +49,10 @@ class ApplicationWriter:
             raise
 
     async def get_critique(self) -> dict:
-        """Get expert critique of the generated letter"""
         if not self.initial_letter:
             raise RuntimeError("Generate initial letter first")
-        
         prompt = ChatPromptTemplate.from_template(critique_template)
-        chain = prompt | self.llm
-        
+        chain = prompt | self.llm 
         try:
             response = await chain.ainvoke({
                 "generated_letter": self.initial_letter,
@@ -74,13 +65,10 @@ class ApplicationWriter:
             raise
 
     async def refine_letter(self) -> str:
-        """Generate final polished letter using critique"""
         if not self.critique:
-            await self.get_critique()
-        
+            await self.get_critique() 
         prompt = ChatPromptTemplate.from_template(final_letter_template)
         chain = prompt | self.llm
-        
         try:
             response = await chain.ainvoke({
                 "initial_letter": self.initial_letter,
@@ -94,12 +82,10 @@ class ApplicationWriter:
             raise
 
     async def get_final_application(self) -> dict:
-        """Full pipeline for end-to-end letter creation"""
         try:
             await self.generate_initial_letter()
             await self.get_critique()
             await self.refine_letter()
-            
             return {
                 "initial_letter": self.initial_letter,
                 "critique": self.critique,
