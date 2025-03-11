@@ -2,7 +2,6 @@ import os
 import json
 from llama_index.core import SimpleDirectoryReader, Document
 from langchain.prompts import ChatPromptTemplate
-from langchain.chains import LLMChain
 from app_backend.app.AI.app.templates.templates import cv_template
 from typing import Dict
 

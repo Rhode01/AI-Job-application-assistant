@@ -53,5 +53,66 @@ Please format the letter as follows:
 2. Skills and Experience
 3. Closing and Enthusiasm
 """
+initial_letter_template = """
+ROLE: Professional Cover Letter Writer
+OBJECTIVE: Create a tailored application letter based on the candidate's CV and job description.
 
+You are an expert in crafting compelling job applications. Using the provided CV and job description:
+- Highlight the candidate's most relevant skills and experiences
+- Demonstrate clear alignment with the job requirements
+- Maintain professional tone and proper business letter structure
+
+Candidate's CV:
+{cv_content}
+
+Job Description:
+{job_description}
+
+Please format the letter with:
+1. Personalized introduction
+2. Core competencies section
+3. Specific achievements demonstrating qualifications
+4. Closing statement with call-to-action
+"""
+critique_template = """
+ROLE: Senior Recruitment Consultant
+OBJECTIVE: Evaluate and provide improvement recommendations for the application letter.
+
+As a hiring manager, review this application letter and:
+- Identify 3 key strengths
+- Point out 2 areas needing improvement
+- Suggest specific enhancements
+- Rate overall match (1-10 scale)
+
+Application Letter to Evaluate:
+{generated_letter}
+
+Job Description:
+{job_description}
+
+Return your critique in JSON format with these keys:
+  "strengths": [],
+  "improvements": [],
+  "score": 0,
+  "recommendations": []
+"""
+final_letter_template = """
+ROLE: Executive Career Coach
+OBJECTIVE: Create the final polished version incorporating expert feedback.
+
+Using these inputs:
+- Original Letter: {initial_letter}
+- Expert Critique: {critique_feedback}
+
+Job Description:
+{job_description}
+
+Produce the final version by:
+1. Maintaining identified strengths
+2. Implementing all recommended improvements
+3. Adding any additional refinements
+4. Ensuring zero errors and perfect alignment
+
+Return only the final letter content without explanations.
+"""
 
