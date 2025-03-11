@@ -1,5 +1,4 @@
 from typing import Optional
-from app_backend.app.AI.app.core.config import ai_model
 from app_backend.app.AI.app.cv_analysis.cv_parser import CVParser
 from app_backend.app.AI.app.templates.templates import (
     initial_letter_template,
