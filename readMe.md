@@ -32,7 +32,7 @@ AI-powered job application assistant optimized for the Malawian job market. Auto
 
 ### Installation
 ```bash
-git clone https://github.com/your-repo/job-application-assistant.git
+git clone https://github.com/Rhode01/AI-Job-application-assistant.git
 cd job-application-assistant
 python3 -m venv venv
 source venv/bin/activate
