@@ -42,13 +42,13 @@ pip install -r requirements.txt
 create .env file:
     OPENAI_API_KEY=your_openai_key
 ### Usage and API Endpoints
-/upload_cv      Method          Description
-                POST            Analyze CV content
+- /upload_cv      Method          Description
+-               POST            Analyze CV content
 
-/job_search     POST            Search myjobo.mw job listings
+- /job_search     POST            Search myjobo.mw job listings
 
 
-/letter_writer  POST            Generate application letter package
+- /letter_writer  POST            Generate application letter package
 
 
 ### Technologies
@@ -58,5 +58,5 @@ create .env file:
 - Job Search : myjobo.mw API integration
 - Deployment : Docker, Uvicorn
 ### Limitations
-⚠️ Requires OpenAI API credits (GPT-4 usage)
-⚠️ CV parsing optimized for standard formats (PDF/DOCX)
+- ⚠️ Requires OpenAI API credits (GPT-4 usage)
+- ⚠️ CV parsing optimized for standard formats (PDF/DOCX)
