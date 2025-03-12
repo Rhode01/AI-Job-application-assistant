@@ -40,7 +40,7 @@ pip install -r requirements.txt
 ```
 ### Configuration
 create .env file:
-    OPENAI_API_KEY=your_openai_key
+- OPENAI_API_KEY=your_openai_key
 ### Usage and API Endpoints
 - /upload_cv      Method          Description
 -               POST            Analyze CV content
