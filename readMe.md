@@ -37,27 +37,26 @@ cd job-application-assistant
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
+```
+### Configuration
+create .env file:
+    OPENAI_API_KEY=your_openai_key
+### Usage and API Endpoints
+/upload_cv      Method          Description
+                POST            Analyze CV content
 
-Configuration
-Create .env file:
-Usage
-API Endpoints
-/upload_cv
-POST
-Analyze CV content
-/job_search
-POST
-Search myjobo.mw job listings
-/letter_writer
-POST
-Generate application letter package
-Technologies
--Core Framework : FastAPI
--NLP Engine : LangChain + GPT-4
--Document Processing : LlamaIndex
--Job Search : myjobo.mw API integration
--Deployment : Docker, Uvicorn
-Limitations
+/job_search     POST            Search myjobo.mw job listings
+
+
+/letter_writer  POST            Generate application letter package
+
+
+### Technologies
+- Core Framework : FastAPI
+- NLP Engine : LangChain + GPT-4
+- Document Processing : LlamaIndex
+- Job Search : myjobo.mw API integration
+- Deployment : Docker, Uvicorn
+### Limitations
 ⚠️ Requires OpenAI API credits (GPT-4 usage)
-⚠️ myjobo.mw integration needs valid account credentials
 ⚠️ CV parsing optimized for standard formats (PDF/DOCX)
