@@ -2,14 +2,12 @@ from fastapi import APIRouter, Depends, HTTPException, File, UploadFile,Form
 from sqlalchemy.ext.asyncio import AsyncSession
 from app_backend.app.db.base import get_db  
 from app_backend.app.crud.user import CRUDUser  
-from app_backend.app.models.user import User
 from app_backend.app.schemas.user import UserDetails
 from app_backend.app.AI.app.core.config import ai_model
 from app_backend.app.AI.app.cv_analysis.cv_parser import CVParser
 from app_backend.app.AI.app.application_writer.writer import ApplicationWriter
 import tempfile
 from app_backend.app.AI.app.job_parser.job_parser import JobParse
-from pydantic import BaseModel, Field
 router = APIRouter()
 
 def get_crud_user():
@@ -37,7 +35,7 @@ async def job_parser(job_title:str):
     return jobparser_results
 @router.post("/letter_writer")
 async def application_letter(job_description :str = Form(...,min_length=100), path_to_cv:UploadFile= File(...)):
-    with tempfile.NamedTemporaryFile(delete=False) as temp:
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as temp:
         temp_cv_path = temp.name
         temp.write(await path_to_cv.read())
     writer= ApplicationWriter(job_description,temp_cv_path,ai_model.model)
