@@ -1,41 +1,11 @@
 import { useState } from 'react';
-import {
-  Card,
-  Tabs,
-  Form,
-  Input,
-  Button,
-  Switch,
-  Select,
-  Divider,
-  Row,
-  Col,
-  message,
-  Upload,
-  Avatar,
-  Radio,
-  Tag,
-  Tooltip,
-  List,
-  Empty,
-  Typography
-} from 'antd';
-import {
-  UserOutlined,
-  MailOutlined,
-  PhoneOutlined,
-  HomeOutlined,
-  BellOutlined,
-  KeyOutlined,
-  CloudUploadOutlined,
-  DeleteOutlined,
-  PlusOutlined,
-  QuestionCircleOutlined,
-  GlobalOutlined,
-  TeamOutlined
-} from '@ant-design/icons';
+import {  Card,  Tabs,  Form,  Input,  Button,  Switch,  Select,  Divider,
+  Row,  Col,  message,  Upload,  Avatar,  Radio,  Tag,  Tooltip,  List,  Empty,
+  Typography  } from 'antd';
+import {  UserOutlined,  MailOutlined,  PhoneOutlined,  HomeOutlined,  BellOutlined,
+  KeyOutlined,  CloudUploadOutlined,  DeleteOutlined,  PlusOutlined,  QuestionCircleOutlined,
+  GlobalOutlined,  TeamOutlined} from '@ant-design/icons';
 import { useTheme } from '../context/ThemeContext';
-
 const { TabPane } = Tabs;
 const { Option } = Select;
 const { Text } = Typography;
@@ -47,13 +17,12 @@ const Settings = () => {
   const [resumeForm] = Form.useForm();
   const [passwordForm] = Form.useForm();
 
-  // Mock settings data
   const [userSettings, setUserSettings] = useState({
     profile: {
-      name: 'Emily Johnson',
-      email: 'emily.johnson@example.com',
-      phone: '(555) 123-4567',
-      location: 'New York, NY',
+      name: 'Rhode01',
+      email: 'Rhode01@example.com',
+      phone: '(+265) 123-4567',
+      location: 'Lilongwe',
       about: 'Frontend Developer with 3 years of experience in React and UI/UX design.',
       avatar: null
     },
@@ -90,11 +59,8 @@ const Settings = () => {
       { id: '7', name: 'MongoDB', level: 'Beginner' },
     ]
   });
-
-  // For resume file upload
   const [fileList, setFileList] = useState([]);
 
-  // For skill addition
   const [newSkill, setNewSkill] = useState({ name: '', level: 'Beginner' });
   const [showSkillInput, setShowSkillInput] = useState(false);
 
