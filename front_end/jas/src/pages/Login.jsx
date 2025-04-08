@@ -1,9 +1,19 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {  Button,  Card,  Divider,  Typography,  Space,
-  Row,  Col } from 'antd';
 import {
-  LockOutlined,  UserOutlined,  GoogleOutlined,  GithubOutlined,
+  Button,
+  Card,
+  Divider,
+  Typography,
+  Space,
+  Row,
+  Col
+} from 'antd';
+import {
+  LockOutlined,
+  UserOutlined,
+  GoogleOutlined,
+  GithubOutlined,
   LinkedinOutlined
 } from '@ant-design/icons';
 import { useAuth } from '../context/AuthContext';

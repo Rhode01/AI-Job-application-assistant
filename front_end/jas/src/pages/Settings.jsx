@@ -1,11 +1,41 @@
 import { useState } from 'react';
-import {  Card,  Tabs,  Form,  Input,  Button,  Switch,  Select,  Divider,
-  Row,  Col,  message,  Upload,  Avatar,  Radio,  Tag,  Tooltip,  List,  Empty,
-  Typography  } from 'antd';
-import {  UserOutlined,  MailOutlined,  PhoneOutlined,  HomeOutlined,  BellOutlined,
-  KeyOutlined,  CloudUploadOutlined,  DeleteOutlined,  PlusOutlined,  QuestionCircleOutlined,
-  GlobalOutlined,  TeamOutlined} from '@ant-design/icons';
+import {
+  Card,
+  Tabs,
+  Form,
+  Input,
+  Button,
+  Switch,
+  Select,
+  Divider,
+  Row,
+  Col,
+  message,
+  Upload,
+  Avatar,
+  Radio,
+  Tag,
+  Tooltip,
+  List,
+  Empty,
+  Typography
+} from 'antd';
+import {
+  UserOutlined,
+  MailOutlined,
+  PhoneOutlined,
+  HomeOutlined,
+  BellOutlined,
+  KeyOutlined,
+  CloudUploadOutlined,
+  DeleteOutlined,
+  PlusOutlined,
+  QuestionCircleOutlined,
+  GlobalOutlined,
+  TeamOutlined
+} from '@ant-design/icons';
 import { useTheme } from '../context/ThemeContext';
+
 const { TabPane } = Tabs;
 const { Option } = Select;
 const { Text } = Typography;
@@ -17,12 +47,13 @@ const Settings = () => {
   const [resumeForm] = Form.useForm();
   const [passwordForm] = Form.useForm();
 
+  // Mock settings data
   const [userSettings, setUserSettings] = useState({
     profile: {
-      name: 'Rhode01',
-      email: 'Rhode01@example.com',
-      phone: '(+265) 123-4567',
-      location: 'Lilongwe',
+      name: 'Emily Johnson',
+      email: 'emily.johnson@example.com',
+      phone: '(555) 123-4567',
+      location: 'New York, NY',
       about: 'Frontend Developer with 3 years of experience in React and UI/UX design.',
       avatar: null
     },
@@ -59,8 +90,11 @@ const Settings = () => {
       { id: '7', name: 'MongoDB', level: 'Beginner' },
     ]
   });
+
+  // For resume file upload
   const [fileList, setFileList] = useState([]);
 
+  // For skill addition
   const [newSkill, setNewSkill] = useState({ name: '', level: 'Beginner' });
   const [showSkillInput, setShowSkillInput] = useState(false);
 
@@ -73,6 +107,7 @@ const Settings = () => {
   };
 
   const handlePasswordSubmit = (values) => {
+    // In a real app, this would call an API to update the password
     console.log('Password update values:', values);
     passwordForm.resetFields();
     message.success('Password updated successfully');
@@ -84,6 +119,7 @@ const Settings = () => {
       preferences: { ...userSettings.preferences, [key]: value }
     });
 
+    // Special handling for dark mode
     if (key === 'darkMode') {
       toggleTheme();
     }
@@ -197,6 +233,7 @@ const Settings = () => {
 
       <Card className={isDark ? 'bg-[#1f1f1f] text-white border-gray-700' : ''}>
         <Tabs defaultActiveKey="profile" className={isDark ? 'text-white' : ''}>
+          {/* Profile Settings */}
           <TabPane
             tab={<span><UserOutlined /> Profile</span>}
             key="profile"
@@ -219,6 +256,8 @@ const Settings = () => {
                       beforeUpload={() => false}
                       onChange={(info) => {
                         if (info.file) {
+                          // In a real app, this would upload the file to a server
+                          // and get back a URL to store in the user profile
                           message.success('Avatar uploaded successfully');
                         }
                       }}

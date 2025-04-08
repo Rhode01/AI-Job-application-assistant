@@ -178,3 +178,19 @@ body {
 .dark .ant-modal-title {
   color: white;
 }
+
+/* Dark mode description styles */
+.dark .description-dark .ant-descriptions-bordered .ant-descriptions-item-label,
+.dark .description-dark .ant-descriptions-bordered .ant-descriptions-item-content {
+  background-color: #1f1f1f;
+  color: white;
+  border-color: #434343;
+}
+
+.dark .description-dark .ant-descriptions-bordered {
+  border-color: #434343;
+}
+
+.dark .description-dark .ant-descriptions-bordered .ant-descriptions-view {
+  border-color: #434343;
+}

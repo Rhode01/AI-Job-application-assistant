@@ -1,16 +1,33 @@
 import { useState, useEffect } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
-import {  Layout,  Menu,  Button,   theme as antTheme,  Drawer } from 'antd';
-import {   HomeOutlined,   FileDoneOutlined,   CalendarOutlined,   SettingOutlined,
+import {
+  Layout,
+  Menu,
+  Button,
+  theme as antTheme,
+  Drawer,
+  Avatar,
+  Dropdown,
+  Typography,
+  Space
+} from 'antd';
+import {
+  HomeOutlined,
+  FileDoneOutlined,
+  CalendarOutlined,
+  SettingOutlined,
   MenuUnfoldOutlined,
   MenuFoldOutlined,
   UserOutlined,
   BellOutlined,
   SearchOutlined,
+  LogoutOutlined
 } from '@ant-design/icons';
 import { useTheme } from '../context/ThemeContext';
+import { useAuth } from '../context/AuthContext';
 
 const { Header, Sider, Content } = Layout;
+const { Text } = Typography;
 
 function DashboardLayout() {
   const [collapsed, setCollapsed] = useState(false);
@@ -19,6 +36,7 @@ function DashboardLayout() {
   const { theme, toggleTheme } = useTheme();
   const { token } = antTheme.useToken();
   const location = useLocation();
+  const { user, logout } = useAuth();
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -62,6 +80,25 @@ function DashboardLayout() {
       icon: <SettingOutlined />,
       label: <Link to="/settings">Settings</Link>,
     },
+  ];
+
+  // User menu items
+  const userMenuItems = [
+    {
+      key: 'profile',
+      icon: <UserOutlined />,
+      label: 'Profile',
+      onClick: () => {
+        // Navigate to profile page
+        window.location.href = '/profile';
+      }
+    },
+    {
+      key: 'logout',
+      icon: <LogoutOutlined />,
+      label: 'Logout',
+      onClick: logout
+    }
   ];
 
   const sideMenu = (
@@ -138,11 +175,28 @@ function DashboardLayout() {
               onClick={toggleTheme}
               className={`${theme === 'dark' ? 'text-white' : 'text-black'}`}
             />
-            <Button
-              type="text"
-              icon={<UserOutlined />}
-              className={`${theme === 'dark' ? 'text-white' : 'text-black'}`}
-            />
+
+            {/* User Avatar & Dropdown */}
+            <Dropdown
+              menu={{ items: userMenuItems }}
+              trigger={['click']}
+              placement="bottomRight"
+            >
+              <Space className="cursor-pointer">
+                <Avatar
+                  size="small"
+                  src={user?.picture}
+                  icon={!user?.picture && <UserOutlined />}
+                  alt={user?.name || 'User'}
+                  className={theme === 'dark' ? 'bg-blue-600' : 'bg-blue-500'}
+                />
+                {!mobileView && (
+                  <Text className={theme === 'dark' ? 'text-white' : 'text-black'} ellipsis>
+                    {user?.name || user?.email || 'User'}
+                  </Text>
+                )}
+              </Space>
+            </Dropdown>
           </div>
         </Header>
         <Content className="p-6">
