@@ -3,7 +3,6 @@ import { ConfigProvider, theme as antdTheme } from 'antd';
 import { ThemeProvider, useTheme } from './context/ThemeContext';
 import DashboardLayout from './layouts/DashboardLayout';
 
-// Import pages (we'll create these next)
 import Dashboard from './pages/Dashboard';
 import Applications from './pages/Applications';
 import Schedule from './pages/Schedule';
