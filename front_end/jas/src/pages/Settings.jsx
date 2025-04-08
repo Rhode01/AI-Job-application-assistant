@@ -73,7 +73,6 @@ const Settings = () => {
   };
 
   const handlePasswordSubmit = (values) => {
-    // In a real app, this would call an API to update the password
     console.log('Password update values:', values);
     passwordForm.resetFields();
     message.success('Password updated successfully');
@@ -85,7 +84,6 @@ const Settings = () => {
       preferences: { ...userSettings.preferences, [key]: value }
     });
 
-    // Special handling for dark mode
     if (key === 'darkMode') {
       toggleTheme();
     }
@@ -199,7 +197,6 @@ const Settings = () => {
 
       <Card className={isDark ? 'bg-[#1f1f1f] text-white border-gray-700' : ''}>
         <Tabs defaultActiveKey="profile" className={isDark ? 'text-white' : ''}>
-          {/* Profile Settings */}
           <TabPane
             tab={<span><UserOutlined /> Profile</span>}
             key="profile"
@@ -222,8 +219,6 @@ const Settings = () => {
                       beforeUpload={() => false}
                       onChange={(info) => {
                         if (info.file) {
-                          // In a real app, this would upload the file to a server
-                          // and get back a URL to store in the user profile
                           message.success('Avatar uploaded successfully');
                         }
                       }}
