@@ -1,17 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
-import {
-  Layout,
-  Menu,
-  Button,
-  theme as antTheme,
-  Drawer
-} from 'antd';
-import {
-  HomeOutlined,
-  FileDoneOutlined,
-  CalendarOutlined,
-  SettingOutlined,
+import {  Layout,  Menu,  Button,   theme as antTheme,  Drawer } from 'antd';
+import {   HomeOutlined,   FileDoneOutlined,   CalendarOutlined,   SettingOutlined,
   MenuUnfoldOutlined,
   MenuFoldOutlined,
   UserOutlined,
