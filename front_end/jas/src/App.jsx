@@ -1,73 +1,60 @@
-import React from 'react';
-import { useState, useEffect } from 'react';
-import { HOMEURL, CVUPLOAD } from './ENDPOINTS';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { ConfigProvider, theme as antdTheme } from 'antd';
+import { ThemeProvider, useTheme } from './context/ThemeContext';
+import DashboardLayout from './layouts/DashboardLayout';
 
-function App() {
-  const [data, setData] = useState(null);
-  const [file, setFile] = useState(null);
-  const [uploadError, setUploadError] = useState(null); 
+// Import pages (we'll create these next)
+import Dashboard from './pages/Dashboard';
+import Applications from './pages/Applications';
+import Schedule from './pages/Schedule';
+import Settings from './pages/Settings';
 
-  useEffect(() => {
-    fetch(HOMEURL)
-      .then((response) => {
-        if (!response.ok) throw new Error("Network response was not ok");
-        return response.json();
-      })
-      .then((responseData) => setData(responseData))
-      .catch((error) => console.error("Fetch error:", error));
-  }, []);
-
-  const handleFileSubmit = () => {
-    if (!file) {
-      setUploadError("Please select a file first");
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append("file", file);
-
-    fetch(CVUPLOAD, {
-      method: "POST",
-      body: formData,
-      
-    })
-      .then((response) => {
-        if (!response.ok) throw new Error("Upload failed");
-        console.log(response.json())
-        return response.json();
-      })
-      .then(() => {
-        setFile(null);
-        setUploadError(null);
-        alert("File uploaded successfully!");
-      })
-      .catch((error) => {
-        setUploadError("Error uploading file: " + error.message);
-        console.error("Upload error:", error);
-      });
-  };
+// Theme configurator for Ant Design
+function ThemeConfigurator({ children }) {
+  const { theme } = useTheme();
 
   return (
-    <div className="home">
-      <h1>APP</h1>
-      {data && <p>{data.info}</p>}
-      {uploadError && <p style={{ color: "red" }}>{uploadError}</p>}
+    <ConfigProvider
+      theme={{
+        algorithm: theme === 'dark'
+          ? antdTheme.darkAlgorithm
+          : antdTheme.defaultAlgorithm,
+        token: {
+          colorPrimary: '#1890ff',
+          colorSuccess: '#52c41a',
+          colorWarning: '#faad14',
+          colorError: '#f5222d',
+          borderRadius: 6,
+        },
+      }}
+    >
+      {children}
+    </ConfigProvider>
+  );
+}
 
-      <h3>Upload your CV Below</h3>
-      <input
-        type="file"
-        accept=".pdf,.doc,.docx"
-        onChange={(e) => setFile(e.target.files[0])}
-      />
-      <button
-        type="button"
-        onClick={handleFileSubmit}
-        disabled={!file}
-        style={{ cursor: !file ? "not-allowed" : "pointer" }}
-      >
-        Upload CV
-      </button>
-    </div>
+function AppRoutes() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<DashboardLayout />}>
+          <Route index element={<Dashboard />} />
+          <Route path="applications" element={<Applications />} />
+          <Route path="schedule" element={<Schedule />} />
+          <Route path="settings" element={<Settings />} />
+        </Route>
+      </Routes>
+    </Router>
+  );
+}
+
+function App() {
+  return (
+    <ThemeProvider>
+      <ThemeConfigurator>
+        <AppRoutes />
+      </ThemeConfigurator>
+    </ThemeProvider>
   );
 }
 
