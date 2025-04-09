@@ -22,16 +22,14 @@ const UserProfile = () => {
   useEffect(() => {
     if (user) {
       profileForm.setFieldsValue({
-        name: user.name,
-        nickname: user.nickname,
-        email: user.email
+        name: user?.name,
+        nickname: user?.nickname,
+        email: user?.email
       });
     }
   }, [user, profileForm]);
 
   const handleProfileSubmit = (values) => {
-    // In a real app, we would make an API call to Auth0 Management API
-    // to update the user's profile
     console.log('Updating profile:', values);
     message.success('Profile updated successfully!');
     setIsEditing(false);
@@ -84,8 +82,8 @@ const UserProfile = () => {
             <div className="flex flex-col items-center">
               <Avatar
                 size={100}
-                src={user.picture}
-                icon={!user.picture && <UserOutlined />}
+                src={user?.picture}
+                icon={!user?.picture && <UserOutlined />}
                 alt={user.name || user.email}
                 className={`${isDark ? 'bg-blue-700' : 'bg-blue-500'} mb-4`}
               />
