@@ -23,7 +23,6 @@ const Applications = () => {
     sortBy: 'dateDesc'
   });
 
-  // Sample applications data
   const [applications, setApplications] = useState([
     {
       key: '1',
@@ -47,54 +46,6 @@ const Applications = () => {
       salary: '$100,000 - $130,000',
       contact: 'hr@datasystems.com',
       notes: 'First interview scheduled for Apr 10',
-      priority: 'High'
-    },
-    {
-      key: '3',
-      company: 'Creative Solutions',
-      position: 'UI/UX Designer',
-      dateApplied: '2025-04-01',
-      status: 'Offer',
-      location: 'San Francisco, CA',
-      salary: '$115,000 - $135,000',
-      contact: 'jane@creativesolutions.com',
-      notes: 'Received offer letter, need to respond by Apr 15',
-      priority: 'Medium'
-    },
-    {
-      key: '4',
-      company: 'Cloud Innovations',
-      position: 'Full Stack Developer',
-      dateApplied: '2025-03-28',
-      status: 'Rejected',
-      location: 'Austin, TX',
-      salary: '$95,000 - $120,000',
-      contact: 'tech@cloudinnovations.com',
-      notes: 'Rejected after final round',
-      priority: 'Low'
-    },
-    {
-      key: '5',
-      company: 'Smart Software',
-      position: 'JavaScript Engineer',
-      dateApplied: '2025-03-25',
-      status: 'Applied',
-      location: 'Chicago, IL',
-      salary: '$85,000 - $105,000',
-      contact: 'careers@smartsoftware.com',
-      notes: 'Applied through LinkedIn',
-      priority: 'Medium'
-    },
-    {
-      key: '6',
-      company: 'Quantum Computing',
-      position: 'Frontend Lead',
-      dateApplied: '2025-03-22',
-      status: 'Interview',
-      location: 'Seattle, WA',
-      salary: '$130,000 - $160,000',
-      contact: 'recruiting@quantum.io',
-      notes: 'Second round interview scheduled for Apr 12',
       priority: 'High'
     }
   ]);
@@ -123,14 +74,12 @@ const Applications = () => {
         };
 
         if (isEditMode && currentApplication) {
-          // Edit existing application
           const updatedApplications = applications.map(app =>
             app.key === currentApplication.key ? { ...formattedValues, key: app.key } : app
           );
           setApplications(updatedApplications);
           message.success('Application updated successfully');
         } else {
-          // Add new application
           const newKey = (Math.max(...applications.map(app => parseInt(app.key))) + 1).toString();
           setApplications([...applications, { ...formattedValues, key: newKey }]);
           message.success('Application added successfully');
@@ -172,35 +121,26 @@ const Applications = () => {
     message.success(`Status updated to ${newStatus}`);
   };
 
-  // Filter applications based on search text and filters
   const filteredApplications = applications.filter(app => {
-    // Search text filter
     const searchFilter = searchText.toLowerCase() === '' ||
       app.company.toLowerCase().includes(searchText.toLowerCase()) ||
       app.position.toLowerCase().includes(searchText.toLowerCase()) ||
       app.location.toLowerCase().includes(searchText.toLowerCase());
 
-    // Status filter
     const statusFilter = filters.status.length === 0 ||
       filters.status.includes(app.status);
 
     return searchFilter && statusFilter;
   }).sort((a, b) => {
-    // Sort by date
     if (filters.sortBy === 'dateDesc') {
       return new Date(b.dateApplied) - new Date(a.dateApplied);
     } else if (filters.sortBy === 'dateAsc') {
       return new Date(a.dateApplied) - new Date(b.dateApplied);
     }
-    // Sort by company name
     else if (filters.sortBy === 'company') {
       return a.company.localeCompare(b.company);
     }
-    // Sort by priority
-    else if (filters.sortBy === 'priority') {
-      const priorityOrder = { 'High': 1, 'Medium': 2, 'Low': 3 };
-      return priorityOrder[a.priority] - priorityOrder[b.priority];
-    }
+
     return 0;
   });
 
@@ -381,20 +321,6 @@ const Applications = () => {
                 className={isDark ? 'ant-select-dark' : ''}
               />
             </Col>
-            <Col xs={12} md={6}>
-              <Select
-                placeholder="Sort by"
-                defaultValue="dateDesc"
-                onChange={(value) => setFilters({ ...filters, sortBy: value })}
-                style={{ width: '100%' }}
-                className={isDark ? 'ant-select-dark' : ''}
-              >
-                <Option value="dateDesc">Newest first</Option>
-                <Option value="dateAsc">Oldest first</Option>
-                <Option value="company">Company name</Option>
-                <Option value="priority">Priority</Option>
-              </Select>
-            </Col>
             <Col xs={12} md={4}>
               <Button
                 type="primary"
@@ -428,118 +354,6 @@ const Applications = () => {
           />
         </div>
       </Card>
-
-      {/* Add/Edit Application Modal */}
-      <Modal
-        title={isEditMode ? 'Edit Application' : 'Application Details'}
-        open={isModalVisible}
-        onOk={handleOk}
-        onCancel={handleCancel}
-        okText={isEditMode ? 'Save' : 'OK'}
-        okButtonProps={{
-          style: { display: isEditMode ? 'inline-block' : 'none' }
-        }}
-        width={700}
-      >
-        <Form
-          form={form}
-          layout="vertical"
-          disabled={!isEditMode}
-          className="mt-4"
-        >
-          <Row gutter={16}>
-            <Col span={12}>
-              <Form.Item
-                name="company"
-                label="Company"
-                rules={[{ required: true, message: 'Please enter company name' }]}
-              >
-                <Input />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item
-                name="position"
-                label="Position"
-                rules={[{ required: true, message: 'Please enter position' }]}
-              >
-                <Input />
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={16}>
-            <Col span={12}>
-              <Form.Item
-                name="dateApplied"
-                label="Date Applied"
-                rules={[{ required: true, message: 'Please select date' }]}
-              >
-                <DatePicker style={{ width: '100%' }} />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item
-                name="status"
-                label="Status"
-                rules={[{ required: true, message: 'Please select status' }]}
-              >
-                <Select>
-                  <Option value="Applied">Applied</Option>
-                  <Option value="Interview">Interview</Option>
-                  <Option value="Offer">Offer</Option>
-                  <Option value="Rejected">Rejected</Option>
-                </Select>
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={16}>
-            <Col span={12}>
-              <Form.Item
-                name="location"
-                label="Location"
-              >
-                <Input />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item
-                name="salary"
-                label="Salary Range"
-              >
-                <Input />
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={16}>
-            <Col span={12}>
-              <Form.Item
-                name="contact"
-                label="Contact Information"
-              >
-                <Input />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item
-                name="priority"
-                label="Priority"
-              >
-                <Select>
-                  <Option value="High">High</Option>
-                  <Option value="Medium">Medium</Option>
-                  <Option value="Low">Low</Option>
-                </Select>
-              </Form.Item>
-            </Col>
-          </Row>
-          <Form.Item
-            name="notes"
-            label="Notes"
-          >
-            <Input.TextArea rows={4} />
-          </Form.Item>
-        </Form>
-      </Modal>
     </div>
   );
 };
