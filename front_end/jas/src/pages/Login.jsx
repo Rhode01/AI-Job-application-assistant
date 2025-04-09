@@ -1,21 +1,8 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-  Button,
-  Card,
-  Divider,
-  Typography,
-  Space,
-  Row,
-  Col
-} from 'antd';
-import {
-  LockOutlined,
-  UserOutlined,
-  GoogleOutlined,
-  GithubOutlined,
-  LinkedinOutlined
-} from '@ant-design/icons';
+import {  Button,  Card,  Divider,  Typography,  Space,  Row,  Col} from 'antd';
+import {  LockOutlined,  UserOutlined,  GoogleOutlined,  GithubOutlined,
+  LinkedinOutlined} from '@ant-design/icons';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import LoadingSpinner from '../components/LoadingSpinner';
@@ -23,12 +10,11 @@ import LoadingSpinner from '../components/LoadingSpinner';
 const { Title, Text, Paragraph } = Typography;
 
 const Login = () => {
-  const { isAuthenticated, isLoading, login } = useAuth();
+  const {isAuthenticated, isLoading, login,logout } = useAuth();
   const { theme } = useTheme();
   const isDark = theme === 'dark';
   const navigate = useNavigate();
 
-  // Redirect to dashboard if already authenticated
   useEffect(() => {
     if (isAuthenticated && !isLoading) {
       navigate('/');
@@ -36,9 +22,10 @@ const Login = () => {
   }, [isAuthenticated, isLoading, navigate]);
 
   const handleLogin = () => {
-    login({
-      appState: { returnTo: window.location.pathname }
-    });
+    login();
+  };
+  const handlelogout = () => {
+    logout();
   };
 
   const bgStyles = isDark
@@ -140,6 +127,7 @@ const Login = () => {
           <Text className={isDark ? 'text-gray-400' : 'text-gray-500'}>
             &copy; {new Date().getFullYear()} JobAssist. All rights reserved.
           </Text>
+          <Button onClick={handlelogout} >Logout</Button>
         </div>
       </div>
     </div>

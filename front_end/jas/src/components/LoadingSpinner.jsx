@@ -2,12 +2,7 @@ import { Spin } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
 import { useTheme } from '../context/ThemeContext';
 
-const LoadingSpinner = ({
-  tip = 'Loading...',
-  fullScreen = false,
-  size = 'large',
-  delay = 0
-}) => {
+const LoadingSpinner = ({ tip = 'Loading...',  fullScreen = false,  size = 'large',  delay = 0 }) => {
   const { theme } = useTheme();
   const isDark = theme === 'dark';
 

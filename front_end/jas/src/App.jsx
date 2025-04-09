@@ -7,15 +7,14 @@ import AuthGuard from './components/AuthGuard';
 import DashboardLayout from './layouts/DashboardLayout';
 import config from './config';
 
-// Import pages
 import Dashboard from './pages/Dashboard';
 import Applications from './pages/Applications';
 import Schedule from './pages/Schedule';
 import Settings from './pages/Settings';
 import Login from './pages/Login';
-import UserProfile from './pages/UserProfile'; // Added UserProfile import
+import UserProfile from './pages/UserProfile'; 
 
-// Theme configurator for Ant Design
+import Callback from './components/CallBack';
 function ThemeConfigurator({ children }) {
   const { theme } = useTheme();
 
@@ -43,10 +42,8 @@ function AppRoutes() {
   return (
     <Router>
       <Routes>
-        {/* Public route for login */}
         <Route path="/login" element={<Login />} />
-
-        {/* Protected routes for authenticated users */}
+        <Route path="/callback" element={<Callback />} />
         <Route path="/" element={
           <AuthGuard>
             <DashboardLayout />
@@ -56,25 +53,21 @@ function AppRoutes() {
           <Route path="applications" element={<Applications />} />
           <Route path="schedule" element={<Schedule />} />
           <Route path="settings" element={<Settings />} />
-          <Route path="profile" element={<UserProfile />} /> {/* Added UserProfile route */}
+          <Route path="profile" element={<UserProfile />} /> 
         </Route>
 
-        {/* Redirect all other routes to dashboard */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>
   );
 }
-
 function App() {
   return (
     <Auth0Provider
-      domain={config.auth0.domain}
-      clientId={config.auth0.clientId}
+      domain={import.meta.env.VITE_APP_AUTH0_DOMAIN}
+      clientId={import.meta.env.VITE_APP_AUTH0_CLIENT_ID}
       authorizationParams={{
-        redirect_uri: config.auth0.redirectUri,
-        scope: config.auth0.scope,
-        ...(config.auth0.audience ? { audience: config.auth0.audience } : {})
+        redirect_uri: `${config.auth0.redirectUri}/callback`
       }}
     >
       <ThemeProvider>

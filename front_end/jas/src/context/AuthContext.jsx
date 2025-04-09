@@ -16,7 +16,6 @@ export function AuthProvider({ children }) {
 
   const [token, setToken] = useState(null);
 
-  // When authentication state changes, show appropriate messages
   useEffect(() => {
     if (!isLoading) {
       if (isAuthenticated) {
@@ -25,7 +24,6 @@ export function AuthProvider({ children }) {
     }
   }, [isLoading, isAuthenticated, user]);
 
-  // Get and store token when authenticated
   useEffect(() => {
     const getToken = async () => {
       if (isAuthenticated) {
@@ -41,7 +39,6 @@ export function AuthProvider({ children }) {
     getToken();
   }, [isAuthenticated, getAccessTokenSilently]);
 
-  // Custom logout function that clears local state in addition to Auth0 logout
   const logout = () => {
     auth0Logout({
       returnTo: window.location.origin

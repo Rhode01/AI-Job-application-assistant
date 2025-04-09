@@ -6,8 +6,6 @@ import LoadingSpinner from './LoadingSpinner';
 const AuthGuard = ({ children }) => {
   const { isAuthenticated, isLoading, login } = useAuth();
   const location = useLocation();
-
-  // Trigger login if not authenticated and not loading
   useEffect(() => {
     if (!isAuthenticated && !isLoading) {
       login({
@@ -18,12 +16,6 @@ const AuthGuard = ({ children }) => {
 
   if (isLoading) {
     return <LoadingSpinner tip="Checking authentication..." fullScreen />;
-  }
-
-  if (!isAuthenticated) {
-    // This navigate won't execute in normal conditions because
-    // login will be triggered in the useEffect, but it's a safety measure
-    return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
   return children;
