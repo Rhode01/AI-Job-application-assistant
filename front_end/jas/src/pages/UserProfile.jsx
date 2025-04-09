@@ -88,9 +88,9 @@ const UserProfile = () => {
                 className={`${isDark ? 'bg-blue-700' : 'bg-blue-500'} mb-4`}
               />
               <Title level={4} className={isDark ? 'text-white' : ''}>
-                {user.name || user.nickname || user.email}
+                {user?.name || user?.nickname || user?.email}
               </Title>
-              {user.email && (
+              {user?.email && (
                 <Text type="secondary" className={isDark ? 'text-gray-300' : ''}>
                   <MailOutlined className="mr-1" /> {user.email}
                 </Text>
@@ -102,7 +102,7 @@ const UserProfile = () => {
                 <Paragraph className={`font-medium mb-2 ${isDark ? 'text-white' : ''}`}>
                   <LockOutlined className="mr-2" /> Identity Providers
                 </Paragraph>
-                {user.sub ? (
+                {user?.sub ? (
                   <div>
                     <Tag
                       icon={getProviderIcon(user.sub.split('|')[0])}
@@ -240,95 +240,6 @@ const UserProfile = () => {
                     description="Password management is handled by your identity provider. To change your password, please visit your provider's website."
                     className="mb-4"
                   />
-
-                  <Divider />
-
-                  <Title level={5} className={isDark ? 'text-white' : ''}>
-                    Multi-Factor Authentication
-                  </Title>
-                  <Paragraph className={isDark ? 'text-gray-300' : 'text-gray-500'}>
-                    Enhance your account security by enabling multi-factor authentication.
-                  </Paragraph>
-                  <Button type="primary">
-                    Set Up MFA
-                  </Button>
-                </div>
-              </TabPane>
-
-              <TabPane tab="Connected Accounts" key="connected">
-                <div className="mb-4">
-                  <Title level={4} className={isDark ? 'text-white' : ''}>
-                    Connected Accounts
-                  </Title>
-
-                  <Paragraph className={isDark ? 'text-gray-300' : 'text-gray-500'}>
-                    Manage third-party accounts connected to your profile.
-                  </Paragraph>
-
-                  <div className="flex flex-col gap-4 mt-6">
-                    <Card className={isDark ? 'bg-[#141414]' : 'bg-gray-50'}>
-                      <div className="flex justify-between items-center">
-                        <div className="flex items-center">
-                          <Avatar icon={<GoogleOutlined />} className="bg-red-500 mr-4" />
-                          <div>
-                            <Text strong className={isDark ? 'text-white' : ''}>Google</Text>
-                            <div>
-                              {user.sub?.startsWith('google-oauth2') ? (
-                                <Tag color="success">Connected</Tag>
-                              ) : (
-                                <Tag color="default">Not Connected</Tag>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                        <Button type={user.sub?.startsWith('google-oauth2') ? 'default' : 'primary'}>
-                          {user.sub?.startsWith('google-oauth2') ? 'Disconnect' : 'Connect'}
-                        </Button>
-                      </div>
-                    </Card>
-
-                    <Card className={isDark ? 'bg-[#141414]' : 'bg-gray-50'}>
-                      <div className="flex justify-between items-center">
-                        <div className="flex items-center">
-                          <Avatar icon={<GithubOutlined />} className="bg-gray-800 mr-4" />
-                          <div>
-                            <Text strong className={isDark ? 'text-white' : ''}>GitHub</Text>
-                            <div>
-                              {user.sub?.startsWith('github') ? (
-                                <Tag color="success">Connected</Tag>
-                              ) : (
-                                <Tag color="default">Not Connected</Tag>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                        <Button type={user.sub?.startsWith('github') ? 'default' : 'primary'}>
-                          {user.sub?.startsWith('github') ? 'Disconnect' : 'Connect'}
-                        </Button>
-                      </div>
-                    </Card>
-
-                    <Card className={isDark ? 'bg-[#141414]' : 'bg-gray-50'}>
-                      <div className="flex justify-between items-center">
-                        <div className="flex items-center">
-                          <Avatar icon={<LinkedinOutlined />} className="bg-blue-600 mr-4" />
-                          <div>
-                            <Text strong className={isDark ? 'text-white' : ''}>LinkedIn</Text>
-                            <div>
-                              {user.sub?.startsWith('linkedin') ? (
-                                <Tag color="success">Connected</Tag>
-                              ) : (
-                                <Tag color="default">Not Connected</Tag>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                        <Button type={user.sub?.startsWith('linkedin') ? 'default' : 'primary'}>
-                          {user.sub?.startsWith('linkedin') ? 'Disconnect' : 'Connect'}
-                        </Button>
-                      </div>
-                    </Card>
-                  </div>
                 </div>
               </TabPane>
             </Tabs>
