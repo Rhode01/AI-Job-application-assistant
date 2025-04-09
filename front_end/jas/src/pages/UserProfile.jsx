@@ -1,31 +1,10 @@
 import { useState, useEffect } from 'react';
-import {
-  Card,
-  Avatar,
-  Typography,
-  Divider,
-  Descriptions,
-  Button,
-  Tag,
-  Tabs,
-  Form,
-  Input,
-  message,
-  Row,
-  Col,
-  Alert
-} from 'antd';
-import {
-  UserOutlined,
-  MailOutlined,
-  LockOutlined,
-  IdcardOutlined,
-  GithubOutlined,
-  GoogleOutlined,
-  LinkedinOutlined,
-  SaveOutlined,
-  EditOutlined
-} from '@ant-design/icons';
+import {   Card,  Avatar,  Typography,  Divider,  Descriptions,
+  Button,  Tag,  Tabs,  Form, Input,  message,  Row,
+  Col,  Alert} from 'antd';
+import {  UserOutlined,  MailOutlined,  LockOutlined,  IdcardOutlined,
+  GithubOutlined,  GoogleOutlined,  LinkedinOutlined,  SaveOutlined,
+  EditOutlined} from '@ant-design/icons';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import LoadingSpinner from '../components/LoadingSpinner';

@@ -10,7 +10,6 @@ import config from './config';
 import Dashboard from './pages/Dashboard';
 import Applications from './pages/Applications';
 import Schedule from './pages/Schedule';
-import Settings from './pages/Settings';
 import Login from './pages/Login';
 import UserProfile from './pages/UserProfile'; 
 
@@ -52,7 +51,6 @@ function AppRoutes() {
           <Route index element={<Dashboard />} />
           <Route path="applications" element={<Applications />} />
           <Route path="schedule" element={<Schedule />} />
-          <Route path="settings" element={<Settings />} />
           <Route path="profile" element={<UserProfile />} /> 
         </Route>
 
