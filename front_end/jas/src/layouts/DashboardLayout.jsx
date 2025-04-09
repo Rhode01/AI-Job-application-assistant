@@ -28,13 +28,12 @@ import { useAuth } from '../context/AuthContext';
 
 const { Header, Sider, Content } = Layout;
 const { Text } = Typography;
-
 function DashboardLayout() {
+  
   const [collapsed, setCollapsed] = useState(false);
   const [mobileView, setMobileView] = useState(false);
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
   const { theme, toggleTheme } = useTheme();
-  const { token } = antTheme.useToken();
   const location = useLocation();
   const { user, logout } = useAuth();
 
@@ -80,16 +79,25 @@ function DashboardLayout() {
       icon: <SettingOutlined />,
       label: <Link to="/settings">Settings</Link>,
     },
+    {
+      key: '/profile',
+      icon: <UserOutlined />,
+      label: <Link to="/profile">Profile</Link>,
+    },
+    {
+      key: '/logout',
+      icon: <LogoutOutlined />,
+      label: <Link to="/logout">Logout</Link>,
+      onClick:logout
+    },
   ];
 
-  // User menu items
   const userMenuItems = [
     {
       key: 'profile',
       icon: <UserOutlined />,
       label: 'Profile',
       onClick: () => {
-        // Navigate to profile page
         window.location.href = '/profile';
       }
     },
@@ -114,7 +122,6 @@ function DashboardLayout() {
 
   return (
     <Layout className={`min-h-screen ${theme === 'dark' ? 'bg-background-dark text-text-dark' : 'bg-background-light text-text-light'}`}>
-      {/* Mobile Drawer for Small Screens */}
       {mobileView && (
         <Drawer
           placement="left"
@@ -130,8 +137,6 @@ function DashboardLayout() {
           {sideMenu}
         </Drawer>
       )}
-
-      {/* Regular Sidebar for Desktop */}
       {!mobileView && (
         <Sider
           trigger={null}
@@ -175,8 +180,6 @@ function DashboardLayout() {
               onClick={toggleTheme}
               className={`${theme === 'dark' ? 'text-white' : 'text-black'}`}
             />
-
-            {/* User Avatar & Dropdown */}
             <Dropdown
               menu={{ items: userMenuItems }}
               trigger={['click']}
