@@ -1,33 +1,13 @@
 import { useState } from 'react';
-import {  Row,  Col,  Card,  Statistic,  Progress,
-  Button,  Table,  Tag,  Space,  Segmented} from 'antd';
-import {  FileDoneOutlined,  ClockCircleOutlined,  CheckCircleOutlined,
-  CloseCircleOutlined,  BarChartOutlined,  LineChartOutlined,  PieChartOutlined
-} from '@ant-design/icons';
+import {  Row,  Col,  Card,  Statistic,  Progress,Segmented} from 'antd';
+import {  FileDoneOutlined,    CheckCircleOutlined,
+  CloseCircleOutlined,  BarChartOutlined} from '@ant-design/icons';
 import { useTheme } from '../context/ThemeContext';
 
 const Dashboard = () => {
   const { theme } = useTheme();
   const [timeRange, setTimeRange] = useState('week');
   const isDark = theme === 'dark';
-
-  const recentApplications = [
-    {
-      key: '1',
-      company: 'TechCorp',
-      position: 'Frontend Developer',
-      date: '2025-04-05',
-      status: 'Applied',
-    }
-  ];
-  const upcomingEvents = [
-    {
-      key: '1',
-      event: 'Technical Interview',
-      company: 'Data Systems Inc',
-      date: '2025-04-10 10:00 AM',
-    }
-  ];
   return (
     <div className="dashboard-container">
       <div className="mb-6">

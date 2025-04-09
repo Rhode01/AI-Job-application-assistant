@@ -8,12 +8,10 @@ import {  SearchOutlined,    PlusOutlined,  EditOutlined,  DeleteOutlined,
 } from '@ant-design/icons';
 import { useTheme } from '../context/ThemeContext';
 
-const { Option } = Select;
 
 const Applications = () => {
   const { theme } = useTheme();
   const isDark = theme === 'dark';
-  const [isModalVisible, setIsModalVisible] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [currentApplication, setCurrentApplication] = useState(null);
   const [form] = Form.useForm();
@@ -65,39 +63,7 @@ const Applications = () => {
     }
   };
 
-  const handleOk = () => {
-    form.validateFields()
-      .then(values => {
-        const formattedValues = {
-          ...values,
-          dateApplied: values.dateApplied ? values.dateApplied.format('YYYY-MM-DD') : '',
-        };
-
-        if (isEditMode && currentApplication) {
-          const updatedApplications = applications.map(app =>
-            app.key === currentApplication.key ? { ...formattedValues, key: app.key } : app
-          );
-          setApplications(updatedApplications);
-          message.success('Application updated successfully');
-        } else {
-          const newKey = (Math.max(...applications.map(app => parseInt(app.key))) + 1).toString();
-          setApplications([...applications, { ...formattedValues, key: newKey }]);
-          message.success('Application added successfully');
-        }
-
-        setIsModalVisible(false);
-        form.resetFields();
-      })
-      .catch(info => {
-        console.log('Validate Failed:', info);
-      });
-  };
-
-  const handleCancel = () => {
-    setIsModalVisible(false);
-    form.resetFields();
-  };
-
+ 
   const handleDelete = (key) => {
     Modal.confirm({
       title: 'Are you sure you want to delete this application?',
@@ -194,7 +160,6 @@ const Applications = () => {
     { label: 'Rejected', value: 'Rejected' }
   ];
 
-  // Table columns configuration
   const columns = [
     {
       title: 'Company',
