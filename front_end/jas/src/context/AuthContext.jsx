@@ -1,7 +1,8 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import { message } from 'antd';
-
+import axios from "axios"
+import api from '../api/api';
 const AuthContext = createContext(undefined);
 
 export function AuthProvider({ children }) {
@@ -38,6 +39,28 @@ export function AuthProvider({ children }) {
 
     getToken();
   }, [isAuthenticated, getAccessTokenSilently]);
+  useEffect(() => {
+    const registerUser = async () => {
+      try {
+        const existingUser = await axios.get(api.endpoints.GET_USER); 
+        if (existingUser) return;
+        await axios.post(api.endpoints.USERS,{
+          id: user?.sub,
+          email: user?.email,
+          first_name: user?.given_name || user?.nickname,
+          last_name: user?.family_name,
+          auth0_metadata: user 
+        });
+      } catch (error) {
+        console.error('Registration failed:', error);
+      }
+    };
+  
+    if (isAuthenticated && !isLoading) {
+      registerUser();
+    }
+  }, [isAuthenticated, isLoading]);
+
 
   const logout = () => {
     auth0Logout({

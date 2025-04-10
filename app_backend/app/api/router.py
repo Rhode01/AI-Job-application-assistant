@@ -2,16 +2,22 @@ from fastapi import APIRouter, Depends, HTTPException, File, UploadFile,Form
 from sqlalchemy.ext.asyncio import AsyncSession
 from app_backend.app.db.base import get_db  
 from app_backend.app.crud.user import CRUDUser  
+from app_backend.app.models.user import User
 from app_backend.app.schemas.user import UserDetails
+from app_backend.app.schemas.cv_summary import CVSummary,CVSummaryBase,CVSummaryCreate
 from app_backend.app.AI.app.core.config import ai_model
 from app_backend.app.AI.app.cv_analysis.cv_parser import CVParser
 from app_backend.app.AI.app.application_writer.writer import ApplicationWriter
 import tempfile
 from app_backend.app.AI.app.job_parser.job_parser import JobParse
+from app_backend.app.services.auth0 import get_current_user
+
 router = APIRouter()
 
 def get_crud_user():
     return CRUDUser()
+def get_current_user():
+    return get_current_user()
 
 @router.post("/users/", response_model=UserDetails)
 async def create_user( user_details: UserDetails, db: AsyncSession = Depends(get_db),
@@ -20,6 +26,7 @@ async def create_user( user_details: UserDetails, db: AsyncSession = Depends(get
 
 @router.post("/upload_cv" )
 async def upload_cv(file:UploadFile = File(...)):
+    print(f"file being received is  {file}")
     with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as temp_file:
         temp_path = temp_file.name
         temp_file.write(await file.read())
@@ -41,8 +48,23 @@ async def application_letter(job_description :str = Form(...,min_length=100), pa
     writer= ApplicationWriter(job_description,temp_cv_path,ai_model.model)
     write_response =await writer.get_final_application()
     return write_response["final_letter"]
+@router.post("/cv_summaries", response_model=CVSummary)
+async def create_cv_summary(summary_data: CVSummaryCreate,  db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    cv_summary = CVSummary(
+        user_id=current_user.id,
+        summary=summary_data.summary
+    )
+    db.add(cv_summary)
+    await db.commit()
+    return cv_summary
+
+
+
+
+
 @router.get("/")
 async def index():
     return {"info":"Home page"}
-
 

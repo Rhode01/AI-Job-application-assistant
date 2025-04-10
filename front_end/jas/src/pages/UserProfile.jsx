@@ -4,11 +4,13 @@ import {   Card,  Avatar,  Typography,  Divider,  Descriptions,
   Col,  Alert} from 'antd';
 import {  UserOutlined,  MailOutlined,  LockOutlined,  IdcardOutlined,
   GithubOutlined,  GoogleOutlined,  LinkedinOutlined,  SaveOutlined,
-  EditOutlined} from '@ant-design/icons';
+  EditOutlined, UploadOutlined} from '@ant-design/icons';
+import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
+import { Flex,Upload } from 'antd';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import LoadingSpinner from '../components/LoadingSpinner';
-
+import api from '../api/api';
 const { Title, Text, Paragraph } = Typography;
 const { TabPane } = Tabs;
 
@@ -18,7 +20,9 @@ const UserProfile = () => {
   const isDark = theme === 'dark';
   const [profileForm] = Form.useForm();
   const [isEditing, setIsEditing] = useState(false);
-
+  const [isCvAvailable, setIsCvAvailbale] = useState(false)
+  const [professional_summary, setProfessional_summary] = useState(null)
+  const [loading, setLoading] = useState(false)
   useEffect(() => {
     if (user) {
       profileForm.setFieldsValue({
@@ -31,9 +35,34 @@ const UserProfile = () => {
 
   const handleProfileSubmit = (values) => {
     console.log('Updating profile:', values);
+    
     message.success('Profile updated successfully!');
     setIsEditing(false);
   };
+
+  const beforeUpload = file => {
+    const pdfOrWordOrText = file.type === 'application/pdf' || file.type === 'text/plain' || file.type ==="application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+    if (!pdfOrWordOrText) {
+      message.error('You can only upload pdf/docs/text file!');
+    }
+    const isLt10M = file.size / 1024 / 1024 <= 10;
+    if (!isLt10M) {
+      message.error('Image must smaller than 10MB!');
+    }
+    return pdfOrWordOrText && isLt10M;
+  };
+  const handleChange = info => {
+    if (info.file.status === 'uploading') {
+      setLoading(true);
+      return;
+    }
+    if (info.file.status === 'done') {
+      getBase64(info.file.originFileObj, url => {
+        setLoading(false);
+      });
+    }
+  }
+
 
   const getProviderIcon = (provider) => {
     switch (provider) {
@@ -64,6 +93,12 @@ const UserProfile = () => {
   if (isLoading || !user) {
     return <LoadingSpinner fullScreen tip="Loading user profile..." />;
   }
+  const uploadButton = (
+    <button style={{ border: 0, background: 'none' }} type="button">
+      {loading ? <LoadingOutlined /> : <UploadOutlined />}
+      <div style={{ marginTop: 8 }}>Upload</div>
+    </button>
+  );
 
   return (
     <div className="user-profile-container max-w-4xl mx-auto">
@@ -226,6 +261,57 @@ const UserProfile = () => {
                     </Form.Item>
                   </Form>
                 )}
+              </TabPane>
+              <TabPane tab="Professional summary" key="professional">
+                <div className="mb-4 flex justify-between items-center">
+                  <Title level={4} className={isDark ? 'text-white' : ''}>
+                      Professional summary
+                  </Title>
+                 {isCvAvailable && <Button
+                    type={isCvAvailable ? 'primary' : 'default'}
+                    icon={isCvAvailable ? <EditOutlined />:'' }
+                    onClick={() => {
+                      if (isEditing) {
+                        profileForm.submit();
+                      } else {
+                        setIsEditing(true);
+                      }
+                    }}
+                  >
+                      <Text level={4} className={isDark ?'text-white' : ''}>Edit CV</Text>
+                  </Button> }
+                </div>
+
+                {professional_summary && isCvAvailable && (
+                  <Descriptions bordered column={1} className={isDark ? 'description-dark' : ''}>
+                    <Descriptions.Item label="Name">{user.name || 'Not provided'}</Descriptions.Item>
+                    <Descriptions.Item label="Nickname">{user.nickname || 'Not provided'}</Descriptions.Item>
+                    <Descriptions.Item label="Email">{user.email || 'Not provided'}</Descriptions.Item>
+                    <Descriptions.Item label="Email Verified">
+                      {user.email_verified ? (
+                        <Tag color="success">Verified</Tag>
+                      ) : (
+                        <Tag color="error">Not Verified</Tag>
+                      )}
+                    </Descriptions.Item>
+                    <Descriptions.Item label="Last Updated">
+                      {user.updated_at ? new Date(user.updated_at).toLocaleString() : 'Unknown'}
+                    </Descriptions.Item>
+                  </Descriptions>
+                )}
+              <Upload
+                name="file"
+                listType="picture-circle"
+                className="avatar-uploader"
+                showUploadList={false}
+                action={api.endpoints.CVUPLOAD}
+                headers={{ Authorization: `Bearer ${token}` }}
+                beforeUpload={beforeUpload}
+                onChange={handleChange}
+              >
+                 {uploadButton}
+              </Upload>
+      
               </TabPane>
 
               <TabPane tab="Security" key="security">
