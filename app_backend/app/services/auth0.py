@@ -2,8 +2,12 @@ from authlib.integrations.starlette_client import OAuth
 from fastapi import HTTPException, Depends
 from fastapi.security import OAuth2AuthorizationCodeBearer
 from jose import jwt
-
+from pydantic_settings import BaseSettings
 oauth = OAuth()
+
+class Settings(BaseSettings):
+    AUTHO_CLIENT_ID :None
+    AUTHO_CLIENT_SECRET_ID: str= None
 oauth.register(
     "auth0",
     client_id=settings.AUTH0_CLIENT_ID,

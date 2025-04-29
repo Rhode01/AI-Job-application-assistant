@@ -61,9 +61,6 @@ async def create_cv_summary(summary_data: CVSummaryCreate,  db: AsyncSession = D
     return cv_summary
 
 
-
-
-
 @router.get("/")
 async def index():
     return {"info":"Home page"}
