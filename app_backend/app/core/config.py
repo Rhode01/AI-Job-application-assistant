@@ -13,10 +13,10 @@ class Settings(BaseSettings):
     
     SQLALCHEMY_DATABASE_URI: Union[PostgresDsn, None] = None
 
-    AUTH0_DOMAIN: Optional[str] = None
-    AUTH0_CLIENT_ID: Optional[str] = None
-    AUTH0_CLIENT_SECRET: Optional[str] = None
-    AUTH0_API_AUDIENCE: Optional[str] = None
+    AUTH0_DOMAIN: str = None
+    AUTH0_CLIENT_ID: str = None
+    AUTH0_CLIENT_SECRET: str = None
+    AUTH0_API_AUDIENCE: str = None
 
     model_config = SettingsConfigDict(env_file=ENV_PATH)
 
