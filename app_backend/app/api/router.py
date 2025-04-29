@@ -11,7 +11,9 @@ from app_backend.app.AI.app.application_writer.writer import ApplicationWriter
 import tempfile
 from app_backend.app.AI.app.job_parser.job_parser import JobParse
 from app_backend.app.services.auth0 import get_current_user
-
+from fastapi.requests import Request
+from authlib.integrations.starlette_client import OAuth
+oauth = OAuth()
 router = APIRouter()
 
 def get_crud_user():
@@ -65,3 +67,21 @@ async def create_cv_summary(summary_data: CVSummaryCreate,  db: AsyncSession = D
 async def index():
     return {"info":"Home page"}
 
+@router.post("/callback")
+async def auth_callback(request: Request, db: AsyncSession = Depends(get_db)):
+    token = await oauth.auth0.authorize_access_token(request)
+    userinfo = token.get('userinfo')
+    if not userinfo:
+        raise HTTPException(401, "Authentication failed")
+    user = await CRUDUser().get(db, userinfo['sub'])
+    if not user:
+        user_data = UserDetails(
+            id=userinfo['sub'],
+            email=userinfo['email'],
+            first_name=userinfo.get('given_name'),
+            last_name=userinfo.get('family_name'),
+            auth0_metadata=userinfo
+        )
+        user = await CRUDUser().create(db, user_data)
+        
+    return {"user": user}
