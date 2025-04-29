@@ -15,7 +15,7 @@ from authlib.integrations.starlette_client import OAuth
 from app_backend.app.core.config import settings
 oauth = OAuth()
 oauth.register(
-    'auth0',
+    name='OAuth',
     client_id=settings.AUTH0_CLIENT_ID,
     client_secret=settings.AUTH0_CLIENT_SECRET,
     client_kwargs={
@@ -71,24 +71,24 @@ async def get_current_user(token: str = Depends(oauth2_scheme),
         raise HTTPException(401, "Token expired")
     except jwt.JWTClaimsError:
         raise HTTPException(401, "Invalid token claims")
-@router.post('/callback')
-async def auth_callback(code: str,db: AsyncSession = Depends(get_db)):
-    try:
-        token = await oauth.auth0.authorize_access_token(code=code)
-        userinfo = token.get('userinfo')
-        if not userinfo:
-            raise HTTPException(400, 'Invalid authentication response')
-        user = await CRUDUser().get(db, userinfo['sub'])
-        if not user:
-            user = await CRUDUser().create(db, UserDetails(
-                id=userinfo['sub'],
-                email=userinfo['email'],
-                first_name=userinfo.get('given_name'),
-                last_name=userinfo.get('family_name'),
-                auth0_metadata=userinfo
-            ))
+# @router.post('/callback')
+# async def auth_callback(code: str,db: AsyncSession = Depends(get_db)):
+#     try:
+#         token = await oauth.auth0.authorize_access_token(code=code)
+#         userinfo = token.get('userinfo')
+#         if not userinfo:
+#             raise HTTPException(400, 'Invalid authentication response')
+#         user = await CRUDUser().get(db, userinfo['sub'])
+#         if not user:
+#             user = await CRUDUser().create(db, UserDetails(
+#                 id=userinfo['sub'],
+#                 email=userinfo['email'],
+#                 first_name=userinfo.get('given_name'),
+#                 last_name=userinfo.get('family_name'),
+#                 auth0_metadata=userinfo
+#             ))
         
-        return {"user": user}
+#         return {"user": user}
         
-    except Exception as e:
-        raise HTTPException(400, f'Authentication failed: {str(e)}')
+#     except Exception as e:
+#         raise HTTPException(400, f'Authentication failed: {str(e)}')

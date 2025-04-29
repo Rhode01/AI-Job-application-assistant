@@ -10,10 +10,8 @@ from app_backend.app.AI.app.cv_analysis.cv_parser import CVParser
 from app_backend.app.AI.app.application_writer.writer import ApplicationWriter
 import tempfile
 from app_backend.app.AI.app.job_parser.job_parser import JobParse
-from app_backend.app.services.auth0 import get_current_user
+from app_backend.app.services.auth0 import get_current_user,oauth
 from fastapi.requests import Request
-from authlib.integrations.starlette_client import OAuth
-oauth = OAuth()
 router = APIRouter()
 
 def get_crud_user():
