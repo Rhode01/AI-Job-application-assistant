@@ -65,7 +65,8 @@ function App() {
       domain={import.meta.env.VITE_APP_AUTH0_DOMAIN}
       clientId={import.meta.env.VITE_APP_AUTH0_CLIENT_ID}
       authorizationParams={{
-        redirect_uri: `${config.auth0.redirectUri}/callback`
+        redirect_uri: `${config.auth0.redirectUri}/callback`,
+        audience: `${config.auth0.audience}`
       }}
     >
       <ThemeProvider>

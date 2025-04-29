@@ -18,7 +18,7 @@ router = APIRouter()
 
 def get_crud_user():
     return CRUDUser()
-@router.post("/callback")
+@router.post("/api/callback")
 async def auth_callback(db: AsyncSession = Depends(get_db),
     user: UserDetails = Depends(get_current_user)):
     return {"status": "success", "user": user}
@@ -26,7 +26,11 @@ async def auth_callback(db: AsyncSession = Depends(get_db),
 async def create_user( user_details: UserDetails, db: AsyncSession = Depends(get_db),
     crud_user: CRUDUser = Depends(get_crud_user)):
     return await crud_user.create(db=db, obj_in=user_details)
-
+@router.get('/protected')
+async def protected_route(
+    current_user: UserDetails = Depends(get_current_user)
+):
+    return {'message': f'Hello {current_user.email}'}
 # @router.post("/upload_cv" )
 # async def upload_cv(file:UploadFile = File(...)):
 #     print(f"file being received is  {file}")
