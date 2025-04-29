@@ -42,7 +42,7 @@ const Login = () => {
         <div className="text-center mb-8">
           <div className="text-4xl font-bold mb-2 text-blue-600">
             <LockOutlined className="mr-2" />
-            JobAssist
+            Job Application Assist
           </div>
           <Text className={isDark ? 'text-gray-300' : 'text-gray-600'}>
             Your personal job application assistant
@@ -125,9 +125,8 @@ const Login = () => {
 
         <div className="mt-8 text-center">
           <Text className={isDark ? 'text-gray-400' : 'text-gray-500'}>
-            &copy; {new Date().getFullYear()} JobAssist. All rights reserved.
+            &copy; {new Date().getFullYear()} Job Application Assist. All rights reserved.
           </Text>
-          <Button onClick={handlelogout} >Logout</Button>
         </div>
       </div>
     </div>
