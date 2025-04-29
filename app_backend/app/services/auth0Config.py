@@ -12,14 +12,8 @@ import os
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 ENV_PATH = os.path.join(BASE_DIR, "..", ".env")
 oauth = OAuth()
-class Settings(BaseSettings):
-    AUTH0_DOMAIN: str
-    AUTH0_CLIENT_ID: str
-    AUTH0_CLIENT_SECRET: str
-    AUTH0_API_AUDIENCE: str
-    
-    SettingsConfigDict(env_file=ENV_PATH)
-auth0_settings = Settings()
+
+
 oauth.register(
     'auth0',
     client_id=auth0_settings.AUTH0_CLIENT_ID,
