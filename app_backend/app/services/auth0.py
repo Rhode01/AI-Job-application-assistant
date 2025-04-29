@@ -33,8 +33,6 @@ async def get_current_user(token: str = Depends(oauth2_scheme),
         user_id = payload.get('sub')
         if not user_id:
             raise HTTPException(401, "Invalid token payload")
-
-        # Get/create user
         crud_user = CRUDUser()
         user = await crud_user.get(db, user_id)
         if not user:
@@ -45,8 +43,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme),
                 last_name=payload.get('family_name'),
                 auth0_metadata=payload
             )
-            user = await crud_user.create(db, user_data)
-        
+            user = await crud_user.create(db, user_data) 
         return user
 
     except requests.exceptions.RequestException:
