@@ -18,24 +18,47 @@ router = APIRouter()
 
 def get_crud_user():
     return CRUDUser()
-def get_current_user():
-    return get_current_user()
-
+@router.post("/callback")
+async def auth_callback(db: AsyncSession = Depends(get_db),
+    user: UserDetails = Depends(get_current_user)):
+    return {"status": "success", "user": user}
 @router.post("/users/", response_model=UserDetails)
 async def create_user( user_details: UserDetails, db: AsyncSession = Depends(get_db),
     crud_user: CRUDUser = Depends(get_crud_user)):
     return await crud_user.create(db=db, obj_in=user_details)
 
-@router.post("/upload_cv" )
-async def upload_cv(file:UploadFile = File(...)):
-    print(f"file being received is  {file}")
-    with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as temp_file:
-        temp_path = temp_file.name
-        temp_file.write(await file.read())
-    cv_parser = CVParser(temp_path, ai_model.model)
-    await cv_parser.initialize()
-    llm_response = await cv_parser.get_processed_data()
-    return llm_response
+# @router.post("/upload_cv" )
+# async def upload_cv(file:UploadFile = File(...)):
+#     print(f"file being received is  {file}")
+#     with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as temp_file:
+#         temp_path = temp_file.name
+#         temp_file.write(await file.read())
+#     cv_parser = CVParser(temp_path, ai_model.model)
+#     await cv_parser.initialize()
+#     llm_response = await cv_parser.get_processed_data()
+#     return llm_response
+@router.post("/upload_cv")
+async def upload_cv(
+    file: UploadFile = File(...),
+    current_user: UserDetails = Depends(get_current_user)
+):
+    try:
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as temp_file:
+            temp_path = temp_file.name
+            temp_file.write(await file.read())
+        
+        cv_parser = CVParser(temp_path, ai_model.model)
+        processed_data = await cv_parser.initialize()
+        
+        # Link CV to user (example implementation)
+        # await crud_user.update_cv_data(db, current_user.id, processed_data)
+        
+        return processed_data
+    except FileNotFoundError:
+        raise HTTPException(400, "File upload failed")
+    except Exception as e:
+        raise HTTPException(500, f"Processing error: {str(e)}")
+
 @router.post("/job_search")
 async def job_parser(job_title:str):
     jobParser_obj = JobParse(job_title)
