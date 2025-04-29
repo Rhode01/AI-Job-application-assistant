@@ -12,7 +12,19 @@ from app_backend.app.db.base import get_db
 import requests
 from fastapi import APIRouter
 from authlib.integrations.starlette_client import OAuth
+from app_backend.app.core.config import settings
 oauth = OAuth()
+oauth.register(
+    'auth0',
+    client_id=settings.AUTH0_CLIENT_ID,
+    client_secret=settings.AUTH0_CLIENT_SECRET,
+    client_kwargs={
+        'scope': 'openid profile email',
+        'audience': settings.AUTH0_API_AUDIENCE
+    },
+    server_metadata_url=f'https://{settings.AUTH0_DOMAIN}/.well-known/openid-configuration'
+)
+
 router = APIRouter()
 oauth2_scheme = OAuth2AuthorizationCodeBearer(
     authorizationUrl=f"https://{settings.AUTH0_DOMAIN}/authorize",
@@ -30,9 +42,11 @@ async def get_current_user(token: str = Depends(oauth2_scheme),
             jwks,
             algorithms=['RS256'],
             audience=settings.AUTH0_API_AUDIENCE,
-            issuer=f"https://{settings.AUTH0_DOMAIN}/"
+            issuer=f"https://{settings.AUTH0_DOMAIN}/",
+            options={"verify_exp": True} 
         )
-        
+        if not payload.get('sub'):
+            raise HTTPException(401, "Missing user identifier")
         user_id = payload.get('sub')
         if not user_id:
             raise HTTPException(401, "Invalid token payload")
@@ -53,7 +67,10 @@ async def get_current_user(token: str = Depends(oauth2_scheme),
         raise HTTPException(503, "Authentication service unavailable")
     except JWTError as e:
         raise HTTPException(401, f"Invalid token: {str(e)}")
-    
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(401, "Token expired")
+    except jwt.JWTClaimsError:
+        raise HTTPException(401, "Invalid token claims")
 @router.post('/callback')
 async def auth_callback(code: str,db: AsyncSession = Depends(get_db)):
     try:

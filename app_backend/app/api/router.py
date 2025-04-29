@@ -18,14 +18,14 @@ router = APIRouter()
 
 def get_crud_user():
     return CRUDUser()
-@router.post("/api/callback")
-async def auth_callback(db: AsyncSession = Depends(get_db),
-    user: UserDetails = Depends(get_current_user)):
-    return {"status": "success", "user": user}
+
 @router.post("/users/", response_model=UserDetails)
 async def create_user( user_details: UserDetails, db: AsyncSession = Depends(get_db),
     crud_user: CRUDUser = Depends(get_crud_user)):
     return await crud_user.create(db=db, obj_in=user_details)
+@router.get("/users/me", response_model=UserDetails)
+async def get_profile(current_user: UserDetails = Depends(get_current_user)):
+    return current_user
 @router.get('/protected')
 async def protected_route(
     current_user: UserDetails = Depends(get_current_user)
