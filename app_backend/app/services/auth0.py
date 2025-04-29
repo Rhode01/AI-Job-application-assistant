@@ -9,23 +9,19 @@ from app_backend.app.core.config import settings
 from app_backend.app.crud.user import CRUDUser
 from app_backend.app.schemas.user import UserDetails
 from app_backend.app.db.base import get_db
+import requests
 
 oauth2_scheme = OAuth2AuthorizationCodeBearer(
     authorizationUrl=f"https://{settings.AUTH0_DOMAIN}/authorize",
     tokenUrl=f"https://{settings.AUTH0_DOMAIN}/oauth/token"
 )
 
-async def get_current_user(
-    token: str = Depends(oauth2_scheme),
-    db: AsyncSession = Depends(get_db)
-) -> UserDetails:
-    """Verify Auth0 token and return user details"""
+async def get_current_user(token: str = Depends(oauth2_scheme),
+    db: AsyncSession = Depends(get_db)) -> UserDetails:
     try:
-        # Fetch Auth0's public keys
         jwks_uri = f"https://{settings.AUTH0_DOMAIN}/.well-known/jwks.json"
         jwks = JsonWebKey.import_key_set(requests.get(jwks_uri).json())
         
-        # Validate token
         payload = jwt.decode(
             token,
             jwks,
